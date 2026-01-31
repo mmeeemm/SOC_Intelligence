@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="One_Blink - Reports Gallery">
+    <title>Reports - One_Blink</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+
+    <style>
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: var(--spacing-xl);
+            margin: var(--spacing-2xl) 0;
+        }
+
+        .report-card {
+            background: white;
+            border-radius: 1rem;
+            padding: var(--spacing-xl);
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-normal);
+            border-left: 4px solid var(--primary);
+        }
+
+        .report-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .report-card.malicious {
+            border-left-color: var(--danger);
+        }
+
+        .report-card.suspicious {
+            border-left-color: var(--warning);
+        }
+
+        .report-card.benign {
+            border-left-color: var(--success);
+        }
+
+        .report-id {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .report-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-md);
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+
+        .report-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-sm);
+            margin: var(--spacing-md) 0;
+        }
+
+        .report-stat {
+            background: var(--light);
+            padding: var(--spacing-sm);
+            border-radius: 0.5rem;
+            text-align: center;
+        }
+
+        .report-stat-label {
+            font-size: 0.75rem;
+            color: var(--gray);
+            margin-bottom: 0.25rem;
+        }
+
+        .report-stat-value {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .report-actions {
+            display: flex;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-lg);
+        }
+
+        .report-actions .btn {
+            flex: 1;
+            font-size: 0.875rem;
+            padding: var(--spacing-sm);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">&#9672;</span>
+                    <div>
+                        <div>One_Blink</div>
+                        <div class="tagline">SOC Intelligence Framework</div>
+                    </div>
+                </div>
+
+                <nav>
+                    <ul class="nav">
+                        <li><a href="/" class="nav-link">Upload</a></li>
+                        <li><a href="/dashboard" class="nav-link">Dashboard</a></li>
+                        <li><a href="/reports" class="nav-link active">Reports</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container" style="margin-top: 2rem;">
+        <div class="text-center mb-4">
+            <h1>Generated Reports</h1>
+            <p class="text-muted">Forensic analysis reports and intelligence assessments</p>
+        </div>
+
+        <!-- Reports Grid -->
+        <div class="reports-grid fade-in" id="reportsGrid">
+            <!-- Sample Report Cards (will be populated dynamically) -->
+            <div class="report-card malicious">
+                <div class="report-id">RPT-20260131-210500</div>
+                <div class="report-meta">
+                    <span>Generated: 2026-01-31 21:05:00</span>
+                    <span class="badge badge-danger">MALICIOUS</span>
+                </div>
+
+                <div class="report-stats">
+                    <div class="report-stat">
+                        <div class="report-stat-label">Events</div>
+                        <div class="report-stat-value">27,544</div>
+                    </div>
+                    <div class="report-stat">
+                        <div class="report-stat-label">Confidence</div>
+                        <div class="report-stat-value text-danger">0.87</div>
+                    </div>
+                    <div class="report-stat">
+                        <div class="report-stat-label">TTPs</div>
+                        <div class="report-stat-value">12</div>
+                    </div>
+                    <div class="report-stat">
+                        <div class="report-stat-label">Alerts</div>
+                        <div class="report-stat-value text-warning">43</div>
+                    </div>
+                </div>
+
+                <div class="report-actions">
+                    <a href="/reports/view/RPT-20260131-210500" class="btn btn-primary">View</a>
+                    <a href="/reports/download/RPT-20260131-210500" class="btn btn-outline">Download</a>
+                </div>
+            </div>
+
+            <div class="report-card suspicious">
+                <div class="report-id">RPT-20260131-203000</div>
+                <div class="report-meta">
+                    <span>Generated: 2026-01-31 20:30:00</span>
+                    <span class="badge badge-warning">SUSPICIOUS</span>
+                </div>
+
+                <div class="report-stats">
+                    <div class="report-stat">
+                        <div class="report-stat-label">Events</div>
+                        <div class="report-stat-value">15,220</div>
+                    </div>
+                    <div class="report-stat">
+                        <div class="report-stat-label">Confidence</div>
+                        <div class="report-stat-value text-warning">0.62</div>
+                    </div>
+                    <div class="report-stat">
+                        <div class="report-stat-label">TTPs</div>
+                        <div class="report-stat-value">7</div>
+                    </div>
+                    <div class="report-stat">
+                        <div class="report-stat-label">Alerts</div>
+                        <div class="report-stat-value text-warning">18</div>
+                    </div>
+                </div>
+
+                <div class="report-actions">
+                    <a href="/reports/view/RPT-20260131-203000" class="btn btn-primary">View</a>
+                    <a href="/reports/download/RPT-20260131-203000" class="btn btn-outline">Download</a>
+                </div>
+            </div>
+
+            <div class="report-card benign">
+                <div class="report-id">RPT-20260131-195500</div>
+                <div class="report-meta">
+                    <span>Generated: 2026-01-31 19:55:00</span>
+                    <span class="badge badge-success">BENIGN</span>
+                </div>
+
+                <div class="report-stats">
+                    <div class="report-stat">
+                        <div class="report-stat-label">Events</div>
+                        <div class="report-stat-value">8,432</div>
+                    </div>
+                    <div class="report-stat">
+                        <div class="report-stat-label">Confidence</div>
+                        <div class="report-stat-value text-success">0.92</div>
+                    </div>
+                    <div class="report-stat">
+                        <div class="report-stat-label">TTPs</div>
+                        <div class="report-stat-value">0</div>
+                    </div>
+                    <div class="report-stat">
+                        <div class="report-stat-label">Alerts</div>
+                        <div class="report-stat-value">0</div>
+                    </div>
+                </div>
+
+                <div class="report-actions">
+                    <a href="/reports/view/RPT-20260131-195500" class="btn btn-primary">View</a>
+                    <a href="/reports/download/RPT-20260131-195500" class="btn btn-outline">Download</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" style="display: none; text-align: center; padding: 4rem 0;">
+            <h2 class="text-muted">No Reports Generated</h2>
+            <p class="text-muted">Upload and analyze a PCAP file to generate your first report</p>
+            <a href="/" class="btn btn-primary mt-3">Upload PCAP</a>
+        </div>
+    </main>
+
+    <script>
+        // Fetch reports from API
+        async function loadReports() {
+            try {
+                const response = await fetch('/api/reports');
+                if (response.ok) {
+                    const reports = await response.json();
+
+                    if (reports.length === 0) {
+                        document.getElementById('reportsGrid').style.display = 'none';
+                        document.getElementById('emptyState').style.display = 'block';
+                    } else {
+                        renderReports(reports);
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to load reports:', error);
+            }
+        }
+
+        function renderReports(reports) {
+            const grid = document.getElementById('reportsGrid');
+            grid.innerHTML = '';
+
+            reports.forEach(report => {
+                const card = createReportCard(report);
+                grid.appendChild(card);
+            });
+        }
+
+        function createReportCard(report) {
+            const div = document.createElement('div');
+            div.className = `report-card ${report.verdict.toLowerCase()}`;
+
+            div.innerHTML = `
+                <div class="report-id">${report.id}</div>
+                <div class="report-meta">
+                    <span>Generated: ${new Date(report.created_at).toLocaleString()}</span>
+                    <span class="badge badge-${getBadgeClass(report.verdict)}">${report.verdict}</span>
+                </div>
+                
+                <div class="report-stats">
+                    <div class="report-stat">
+                        <div class="report-stat-label">Events</div>
+                        <div class="report-stat-value">${report.events_count.toLocaleString()}</div>
+                    </div>
+                    <div class="report-stat">
+                        <div class="report-stat-label">Confidence</div>
+                        <div class="report-stat-value text-${getConfidenceClass(report.confidence)}">${report.confidence}</div>
+                    </div>
+                    <div class="report-stat">
+                        <div class="report-stat-label">TTPs</div>
+                        <div class="report-stat-value">${report.ttps_count}</div>
+                    </div>
+                    <div class="report-stat">
+                        <div class="report-stat-label">Alerts</div>
+                        <div class="report-stat-value text-warning">${report.alerts_count}</div>
+                    </div>
+                </div>
+                
+                <div class="report-actions">
+                    <a href="/reports/view/${report.id}" class="btn btn-primary">View</a>
+                    <a href="/reports/download/${report.id}" class="btn btn-outline">Download</a>
+                </div>
+            `;
+
+            return div;
+        }
+
+        function getBadgeClass(verdict) {
+            const map = {
+                'MALICIOUS': 'danger',
+                'SUSPICIOUS': 'warning',
+                'BENIGN': 'success'
+            };
+            return map[verdict] || 'info';
+        }
+
+        function getConfidenceClass(confidence) {
+            if (confidence >= 0.8) return 'success';
+            if (confidence >= 0.5) return 'warning';
+            return 'danger';
+        }
+
+        // Load reports on page load
+        // document.addEventListener('DOMContentLoaded', loadReports);
+    </script>
+</body>
+
+</html>

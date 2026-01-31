@@ -1,0 +1,151 @@
+/*
+ * Chart.js Custom Styling for One_Blink
+ * Specialized styles for data visualizations
+ */
+
+/* ========== CHART CONTAINERS ========== */
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: var(--spacing-xl);
+    margin: var(--spacing-2xl) 0;
+}
+
+.chart-card {
+    background: white;
+    padding: var(--spacing-xl);
+    border-radius: 1rem;
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-normal);
+}
+
+.chart-card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-4px);
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 2px solid var(--gray-light);
+}
+
+.chart-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--dark);
+    margin: 0;
+}
+
+.chart-legend {
+    font-size: 0.875rem;
+    color: var(--gray);
+}
+
+.chart-canvas {
+    position: relative;
+    height: 300px;
+    width: 100%;
+}
+
+/* Large charts */
+.chart-card-large .chart-canvas {
+    height: 400px;
+}
+
+/* Small charts */
+.chart-card-small .chart-canvas {
+    height: 200px;
+}
+
+/* ========== CHART ACTIONS ========== */
+.chart-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-md);
+}
+
+.chart-btn {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    border: none;
+    background: var(--gray-light);
+    color: var(--dark);
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.chart-btn:hover {
+    background: var(--primary);
+    color: white;
+}
+
+/* ========== CHART TOOLTIPS ========== */
+.chartjs-tooltip {
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    pointer-events: none;
+}
+
+/* ========== CHART LOADING STATE ========== */
+.chart-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+    color: var(--gray);
+}
+
+.chart-spinner {
+    border: 3px solid var(--gray-light);
+    border-top: 3px solid var(--primary);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* ========== CHART NO DATA STATE ========== */
+.chart-no-data {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+    color: var(--gray);
+    text-align: center;
+}
+
+.chart-no-data-icon {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-md);
+    opacity: 0.5;
+}
+
+/* ========== RESPONSIVE CHARTS ========== */
+@media (max-width: 768px) {
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-canvas {
+        height: 250px;
+    }
+}
