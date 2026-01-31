@@ -36,23 +36,34 @@ st.set_page_config(
 # Custom CSS for professional look
 st.markdown("""
 <style>
-    /* Hide all dashboard framework branding */
-    #MainMenu {visibility: hidden !important;}
-    footer {visibility: hidden !important;}
-    header {visibility: hidden !important;}
+    /* ========== HIDE ALL FRAMEWORK BRANDING ========== */
+    
+    /* Hide menus and toolbars */
+    #MainMenu {visibility: hidden !important; display: none !important;}
+    footer {visibility: hidden !important; display: none !important;}
+    header {visibility: hidden !important; display: none !important;}
     .stDeployButton {display: none !important;}
     button[kind="header"] {display: none !important;}
-    [data-testid="stToolbar"] {display: none !important;}
+    [data-testid="stToolbar"] {visibility: hidden !important; display: none !important;}
+    [data-testid="stDecoration"] {display: none !important;}
+    [data-testid="stStatusWidget"] {display: none !important;}
+    
+    /* Hide badges and watermarks */
     .viewerBadge_container__1QSob {display: none !important;}
     .styles_viewerBadge__1yB5_ {display: none !important;}
-    #MainMenu {visibility: hidden !important;}
-    header {visibility: hidden !important;}
-    footer {visibility: hidden !important;}
+    .viewerBadge_link__1S137 {display: none !important;}
+    .viewerBadge_text__1JaDK {display: none !important;}
     
-    /* Hide any text containing 'Streamlit' */
-    div:contains("Streamlit") {display: none !important;}
-    span:contains("Streamlit") {display: none !important;}
-    p:contains("Streamlit") {display: none !important;}
+    /* Hide any logos */
+    img[alt*="Streamlit"] {display: none !important;}
+    img[src*="streamlit"] {display: none !important;}
+    svg[class*="streamlit"] {display: none !important;}
+    
+    /* Hide any text containing framework name */
+    div:contains("Streamlit") {visibility: hidden !important;}
+    span:contains("Streamlit") {visibility: hidden !important;}
+    p:contains("Streamlit") {visibility: hidden !important;}
+    a[href*="streamlit"] {display: none !important;}
     
     .main-header {
         font-size: 2.5rem;
