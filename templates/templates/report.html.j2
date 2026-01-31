@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOC Ticket Report - {{ report.ticket.id }}</title>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2c5282;
+            --accent: #3182ce;
+            --success: #38a169;
+            --warning: #d69e2e;
+            --danger: #e53e3e;
+            --bg: #f7fafc;
+            --card-bg: #ffffff;
+            --text: #2d3748;
+            --text-light: #718096;
+            --border: #e2e8f0;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1, h2, h3, h4 {
+            color: var(--primary);
+            margin-bottom: 0.5em;
+        }
+        
+        h1 { font-size: 1.8rem; }
+        h2 { font-size: 1.4rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.3em; margin-top: 1.5em; }
+        h3 { font-size: 1.1rem; color: var(--secondary); }
+        
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .header-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+        }
+        
+        .header-card h1 { color: white; }
+        .header-card .meta { opacity: 0.9; }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .stat-box {
+            background: var(--bg);
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+        
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .badge-threat { background: var(--danger); color: white; }
+        .badge-fp { background: var(--success); color: white; }
+        .badge-unset { background: var(--text-light); color: white; }
+        .badge-high { background: var(--danger); color: white; }
+        .badge-medium { background: var(--warning); color: white; }
+        .badge-low { background: var(--success); color: white; }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+        
+        th, td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        th {
+            background: var(--bg);
+            font-weight: 600;
+            color: var(--secondary);
+        }
+        
+        tr:hover { background: #f8fafc; }
+        
+        .weighting-box {
+            display: flex;
+            gap: 20px;
+            margin: 15px 0;
+        }
+        
+        .weight-item {
+            flex: 1;
+            background: var(--bg);
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        
+        .weight-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+        
+        .ttp-card {
+            background: var(--bg);
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .ttp-id {
+            font-family: monospace;
+            font-weight: bold;
+            color: var(--secondary);
+        }
+        
+        .ttp-confidence {
+            float: right;
+            font-size: 0.9rem;
+        }
+        
+        .analysis-box {
+            background: #edf2f7;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            white-space: pre-wrap;
+            font-size: 0.95rem;
+        }
+        
+        .conclusion-box {
+            background: linear-gradient(135deg, #ebf8ff 0%, #e6fffa 100%);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .action-list {
+            list-style: none;
+        }
+        
+        .action-list li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .action-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+        }
+        
+        .limitations {
+            background: #fffaf0;
+            border: 1px solid #fbd38d;
+            padding: 15px;
+            border-radius: 6px;
+        }
+        
+        .limitations li {
+            margin: 5px 0;
+            color: var(--text-light);
+        }
+        
+        .footer {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.85rem;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+        
+        @media print {
+            body { padding: 0; }
+            .card { box-shadow: none; border: 1px solid var(--border); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 1. Ticket Header -->
+        <div class="card header-card">
+            <h1>🔒 SOC Ticket Report</h1>
+            <div class="meta">
+                <strong>Ticket ID:</strong> {{ report.ticket.id }} |
+                <strong>Generated:</strong> {{ report.generated_at.strftime('%Y-%m-%d %H:%M:%S UTC') }}
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>1. Ticket Details</h2>
+            <div class="grid">
+                <div class="stat-box">
+                    <div class="stat-label">Status</div>
+                    <div class="stat-value">{{ report.ticket.status | upper }}</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Severity</div>
+                    <div class="stat-value">{{ report.ticket.severity | upper }}</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Outcome</div>
+                    <span class="badge {% if report.ticket.outcome == 'Threat' %}badge-threat{% elif report.ticket.outcome == 'False Positive' %}badge-fp{% else %}badge-unset{% endif %}">
+                        {{ report.ticket.outcome }}
+                    </span>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Trigger Type</div>
+                    <div class="stat-value" style="font-size: 1rem;">{{ report.ticket.trigger.type }}</div>
+                </div>
+            </div>
+            <p style="margin-top: 15px;">
+                <strong>Trigger Timestamp (T0):</strong> {{ report.analysis_window.anchor_t0.strftime('%Y-%m-%d %H:%M:%S UTC') }}<br>
+                <strong>Analysis Window:</strong> {{ report.analysis_window.start.strftime('%Y-%m-%d %H:%M') }} → {{ report.analysis_window.end.strftime('%Y-%m-%d %H:%M') }} ({{ report.analysis_window.duration_hours }}h)<br>
+                <strong>Data Sources:</strong> {{ report.ticket.data_sources | join(', ') }}
+            </p>
+        </div>
+        
+        <!-- 2. Indicator Overview -->
+        <div class="card">
+            <h2>2. Indicator Overview</h2>
+            <table>
+                <tr><th>IOC Type</th><td>{{ report.indicator.ioc_type }}</td></tr>
+                <tr><th>IOC Value</th><td><code>{{ report.indicator.ioc_value }}</code></td></tr>
+                <tr><th>Matched Fields</th><td>{{ report.indicator.matched_fields | join(', ') or 'N/A' }}</td></tr>
+                <tr><th>Protocols Involved</th><td>{{ report.indicator.protocols_involved | join(', ') or 'N/A' }}</td></tr>
+                <tr><th>First Seen (Window)</th><td>{{ report.indicator.first_seen_in_window.strftime('%Y-%m-%d %H:%M:%S') if report.indicator.first_seen_in_window else 'N/A' }}</td></tr>
+                <tr><th>Last Seen (Window)</th><td>{{ report.indicator.last_seen_in_window.strftime('%Y-%m-%d %H:%M:%S') if report.indicator.last_seen_in_window else 'N/A' }}</td></tr>
+            </table>
+        </div>
+        
+        <!-- 3. Historical Ticket Statistics -->
+        <div class="card">
+            <h2>3. Historical Ticket Statistics (Same IOC)</h2>
+            <div class="grid">
+                <div class="stat-box">
+                    <div class="stat-value">{{ report.historical_ticket_statistics.total_tickets }}</div>
+                    <div class="stat-label">Total Historical Tickets</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" style="color: var(--danger);">{{ report.historical_ticket_statistics.threat_count }}</div>
+                    <div class="stat-label">Confirmed Threats (TP)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" style="color: var(--success);">{{ report.historical_ticket_statistics.false_positive_count }}</div>
+                    <div class="stat-label">False Positives (FP)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">
+                        {% if report.historical_ticket_statistics.threat_ratio is not none %}
+                            {{ "%.1f" | format(report.historical_ticket_statistics.threat_ratio * 100) }}%
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </div>
+                    <div class="stat-label">Threat Ratio</div>
+                </div>
+            </div>
+            {% if report.historical_ticket_statistics.last_observed_ticket %}
+            <p style="margin-top: 10px; color: var(--text-light);">
+                Last observed: {{ report.historical_ticket_statistics.last_observed_ticket.strftime('%Y-%m-%d %H:%M:%S') }}
+            </p>
+            {% endif %}
+        </div>
+        
+        <!-- 4. Analysis Weighting -->
+        <div class="card">
+            <h2>4. Analysis Weighting</h2>
+            <div class="weighting-box">
+                <div class="weight-item">
+                    <div class="weight-value">{{ "%.0f" | format(report.analysis_weighting.current_behavior * 100) }}%</div>
+                    <div class="stat-label">Current Window Behavior</div>
+                </div>
+                <div class="weight-item">
+                    <div class="weight-value">{{ "%.0f" | format(report.analysis_weighting.historical_outcomes * 100) }}%</div>
+                    <div class="stat-label">Historical Ticket Outcomes</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 5. Current-Window Communication Summary -->
+        <div class="card">
+            <h2>5. Current-Window Communication Summary</h2>
+            <div class="grid">
+                <div class="stat-box">
+                    <div class="stat-value">{{ report.current_window_summary.total_ioc_sightings }}</div>
+                    <div class="stat-label">Total IOC Sightings</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">{{ report.current_window_summary.distinct_src_ip_count }}</div>
+                    <div class="stat-label">Distinct Source IPs</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">{{ report.current_window_summary.distinct_dst_ip_count }}</div>
+                    <div class="stat-label">Distinct Destination IPs</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">{{ report.current_window_summary.distinct_country_pairs }}</div>
+                    <div class="stat-label">Country Pairs</div>
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 20px;">Protocol Coverage</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Protocol</th>
+                        <th>Log Type</th>
+                        <th>Sightings</th>
+                        <th>Src IPs</th>
+                        <th>Dst IPs</th>
+                        <th>Matched Fields</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in report.current_window_summary.protocol_coverage %}
+                    <tr>
+                        <td>{{ p.protocol }}</td>
+                        <td>{{ p.zeek_log_type }}</td>
+                        <td>{{ p.sightings }}</td>
+                        <td>{{ p.distinct_src_ip }}</td>
+                        <td>{{ p.distinct_dst_ip }}</td>
+                        <td>{{ p.matched_fields_used | join(', ') }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            {% if report.current_window_summary.country_pair_distribution %}
+            <h3 style="margin-top: 20px;">Top Country Pairs</h3>
+            <table>
+                <thead>
+                    <tr><th>Source Country</th><th>Destination Country</th><th>Count</th></tr>
+                </thead>
+                <tbody>
+                    {% for cp in report.current_window_summary.country_pair_distribution[:5] %}
+                    <tr>
+                        <td>{{ cp.src_country }}</td>
+                        <td>{{ cp.dst_country }}</td>
+                        <td>{{ cp.count }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+        </div>
+        
+        <!-- 6. Additional Assets Involved -->
+        <div class="card">
+            <h2>6. Additional Assets Involved (±24h)</h2>
+            <div class="grid">
+                <div class="stat-box">
+                    <div class="stat-value">{{ report.additional_assets_involved.distinct_ip_total }}</div>
+                    <div class="stat-label">Distinct IP Entities (Total)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">{{ report.additional_assets_involved.distinct_ip_excluding_trigger }}</div>
+                    <div class="stat-label">Excluding Trigger Entity</div>
+                </div>
+            </div>
+            <p style="margin-top: 10px; font-style: italic; color: var(--text-light);">
+                ⚠️ {{ report.additional_assets_involved.nat_aggregation_note }}
+            </p>
+        </div>
+        
+        <!-- 7. Detailed Communications Analysis -->
+        <div class="card">
+            <h2>7. Detailed Communications & Zeek Log Analysis</h2>
+            <div class="analysis-box">{{ report.ai_generated.detailed_communications_analysis }}</div>
+            
+            <h3 style="margin-top: 20px;">Zeek Field Review</h3>
+            <p><strong>Log types analyzed:</strong> {{ report.zeek_field_review.fields_present.keys() | list | join(', ') or 'N/A' }}</p>
+            <p><strong>Fields used in summary:</strong> 
+                {% for log_type, fields in report.zeek_field_review.fields_used_in_summary.items() %}
+                    {{ log_type }}: {{ fields | join(', ') }}{% if not loop.last %}; {% endif %}
+                {% endfor %}
+            </p>
+        </div>
+        
+        <!-- 8. Observed TTPs -->
+        <div class="card">
+            <h2>8. Observed TTPs (Network-Inferred)</h2>
+            {% if report.observed_ttps %}
+                {% for ttp in report.observed_ttps %}
+                <div class="ttp-card">
+                    <span class="ttp-confidence">
+                        <span class="badge {% if ttp.confidence >= 0.7 %}badge-high{% elif ttp.confidence >= 0.4 %}badge-medium{% else %}badge-low{% endif %}">
+                            {{ "%.0f" | format(ttp.confidence * 100) }}%
+                        </span>
+                    </span>
+                    <div class="ttp-id">{{ ttp.technique_id }}</div>
+                    <div><strong>{{ ttp.technique_name }}</strong></div>
+                    <p style="margin-top: 5px; color: var(--text-light);">{{ ttp.justification }}</p>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p style="color: var(--text-light);">No specific TTPs inferred from network behavior.</p>
+            {% endif %}
+        </div>
+        
+        <!-- 9. AI-Generated Technical Analysis -->
+        <div class="card">
+            <h2>9. AI-Generated Technical Analysis & Conclusion</h2>
+            <div class="conclusion-box">
+                {{ report.ai_generated.technical_conclusion }}
+            </div>
+            <div style="margin-top: 15px; text-align: center;">
+                <span class="badge {% if report.ai_generated.confidence.level == 'high' %}badge-high{% elif report.ai_generated.confidence.level == 'medium' %}badge-medium{% else %}badge-low{% endif %}" style="font-size: 1rem; padding: 8px 20px;">
+                    Confidence: {{ report.ai_generated.confidence.level | upper }} ({{ "%.2f" | format(report.ai_generated.confidence.score) }})
+                </span>
+            </div>
+        </div>
+        
+        <!-- 10. Recommended Actions -->
+        <div class="card">
+            <h2>10. Recommended Actions</h2>
+            
+            {% if report.recommended_actions.immediate %}
+            <h3>🚨 Immediate Actions</h3>
+            <ul class="action-list">
+                {% for action in report.recommended_actions.immediate %}
+                <li>{{ action }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            
+            {% if report.recommended_actions.validation %}
+            <h3>🔍 Validation Steps</h3>
+            <ul class="action-list">
+                {% for action in report.recommended_actions.validation %}
+                <li>{{ action }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            
+            {% if report.recommended_actions.long_term %}
+            <h3>📋 Long-term Actions</h3>
+            <ul class="action-list">
+                {% for action in report.recommended_actions.long_term %}
+                <li>{{ action }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        
+        <!-- 11. Limitations -->
+        <div class="card">
+            <h2>11. Limitations</h2>
+            <div class="limitations">
+                <ul>
+                    {% for limitation in report.limitations %}
+                    <li>{{ limitation }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>SecAI Reporter v{{ report.schema_version }} | Generated {{ report.generated_at.strftime('%Y-%m-%d %H:%M:%S UTC') }}</p>
+            <p>This report contains aggregated summaries only. Raw logs are not included.</p>
+        </div>
+    </div>
+</body>
+</html>

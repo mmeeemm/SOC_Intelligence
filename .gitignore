@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Data
+data/*.duckdb
+data/*.db
+data/*.sqlite
+*.pcap
+*.pcapng
+logs/*.log
+
+# Secrets
+.env
+*.key
+*.pem
+config/secrets.yaml
+
+# Models
+models/*.bin
+models/*.pt
+models/*.safetensors
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Reports
+reports/*.html
+reports/*.json
+reports/*.pdf
+
+# Temporary
+tmp/
+temp/
+*.tmp
+
+# Streamlit
+.streamlit/secrets.toml
