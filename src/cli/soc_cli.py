@@ -147,23 +147,7 @@ def view_report(report_file):
 def health(db_path):
     """Check system health"""
     
-    click.echo("        ╱╲")
-    click.echo("       ╱  ╲")
-    click.echo("      ╱    ╲")
-    click.echo("     ╱  SOC ╲")
-    click.echo("    ╱  Intel ╲")
-    click.echo("   ╱  ligence ╲")
-    click.echo("  ╱            ╲")
-    click.echo(" ╱──────────────╲")
-    click.echo(" ╲──────────────╱")
-    click.echo("  ╲            ╱")
-    click.echo("   ╲  Platform╱")
-    click.echo("    ╲        ╱")
-    click.echo("     ╲      ╱")
-    click.echo("      ╲    ╱")
-    click.echo("       ╲  ╱")
-    click.echo("        ╲╱")
-    click.echo("\nSOC Intelligence - System Health Check\n")
+    click.echo("SOC Intelligence - System Health Check\n")
     
     analyzer = UnifiedAnalyzer(db_path=db_path)
     health_status = analyzer.health_check()
