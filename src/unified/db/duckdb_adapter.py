@@ -46,8 +46,12 @@ class DuckDBAdapter:
         
         # TOON Events table
         self.conn.execute("""
+            CREATE SEQUENCE IF NOT EXISTS toon_events_id_seq START  1
+        """)
+        
+        self.conn.execute("""
             CREATE TABLE IF NOT EXISTS toon_events (
-                id INTEGER PRIMARY KEY,
+                id INTEGER PRIMARY KEY DEFAULT nextval('toon_events_id_seq'),
                 t DOUBLE NOT NULL,
                 si VARCHAR,
                 sp INTEGER,
