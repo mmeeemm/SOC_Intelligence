@@ -1,8 +1,8 @@
-# SOC_Intelligence Platform
+# One_Blink
 
-**Unified Enterprise SOC Analysis Platform**
+**SOC Intelligence Framework - Enterprise Cybersecurity Analysis Platform**
 
-Combining the best of One_Blink and SecAI Reporter with AI-powered Ultimate Prompt analysis.
+Unified platform combining advanced network forensics, AI-powered threat intelligence, and professional SOC reporting.
 
 ---
 

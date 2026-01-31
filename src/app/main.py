@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 # Page configuration
 st.set_page_config(
-    page_title="SOC Intelligence Platform",
+    page_title="One_Blink - SOC Intelligence Framework",
     page_icon="",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -118,16 +118,16 @@ st.sidebar.info(f" Zeek: {'Enabled' if health['ingestion']['zeek'] else 'Disable
 st.sidebar.info(f"🚨 Snort: {'Enabled' if health['ingestion']['snort'] else 'Disabled'}")
 
 st.sidebar.markdown("---")
-st.sidebar.caption("SOC_Intelligence v1.0 | Ultimate Analysis Engine")
+st.sidebar.caption("One_Blink v1.0 | SOC Intelligence Framework")
 
 # Main content area
 if page == "Dashboard":
-    st.markdown('<div class="main-header">SOC Intelligence Platform</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-header">One_Blink - SOC Intelligence Framework</div>', unsafe_allow_html=True)
     
     st.markdown("""
-    ### Welcome to SOC Intelligence
+    ### Welcome to One_Blink
     
-    A unified platform combining:
+    SOC Intelligence Framework - A unified platform combining:
     - **Live PCAP Analysis**: Real-time network traffic forensics
     - **Professional SOC Reports**: Enterprise-grade 14-section analysis
     - **AI-Powered Intelligence**: LLM-driven threat assessment

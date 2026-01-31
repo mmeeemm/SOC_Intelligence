@@ -147,7 +147,8 @@ def view_report(report_file):
 def health(db_path):
     """Check system health"""
     
-    click.echo("SOC Intelligence - System Health Check\n")
+    click.echo("One_Blink - SOC Intelligence Framework")
+    click.echo("System Health Check\n")
     
     analyzer = UnifiedAnalyzer(db_path=db_path)
     health_status = analyzer.health_check()
