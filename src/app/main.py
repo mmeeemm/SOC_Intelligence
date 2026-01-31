@@ -121,8 +121,8 @@ st.sidebar.markdown("---")
 st.sidebar.caption("SOC_Intelligence v1.0 | Ultimate Analysis Engine")
 
 # Main content area
-if page == " Dashboard":
-    st.markdown('<div class="main-header"> SOC Intelligence Platform</div>', unsafe_allow_html=True)
+if page == "Dashboard":
+    st.markdown('<div class="main-header">SOC Intelligence Platform</div>', unsafe_allow_html=True)
     
     st.markdown("""
     ### Welcome to SOC Intelligence
